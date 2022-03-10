@@ -1,41 +1,47 @@
 package com.cards;
 
-
 public class Cards {
 
-	String[][] shuffle;
 	int noOfPlayer;
 	int noOfCards;
 	DeckOfCard deck;
+	Player[] players;
 
 	public Cards(int noOfPlayer, int noOfCards) {
 		this.noOfCards = noOfCards;
 		this.noOfPlayer = noOfPlayer;
-		shuffle = new String[noOfPlayer][noOfCards];
 		deck = new DeckOfCard();
 		deck.init();
+		initPlayers();
+	}
+
+	private void initPlayers() {
+		players = new Player[noOfPlayer];
+		for (int i = 0; i < players.length; i++) {
+			players[i] = new Player(9);
+		}
 	}
 
 	public void printShuffledCard() {
-		for (int i = 0; i < noOfPlayer; i++) {
-			for (int j = 0; j < noOfCards; j++) {
-				System.out.print(shuffle[i][j] + "\t");
-			}
+		for (int i = 0; i < players.length; i++) {
+			System.out.println("Player" + i + " cards : ");
+			players[i].sortCards();
+			players[i].printCards();
 			System.out.print("\n");
 		}
 	}
 
 	public void shuffleCards() {
 		for (int i = 0; i < noOfCards; i++) {
-			for (int j = 0; j < noOfPlayer; j++) {
+			for (int j = 0; j < players.length; j++) {
 				int randomNumber = (int) (Math.random()
 						* deck.deckOfCard.length);
-				shuffle[j][i] = deck.deckOfCard[randomNumber];
+				players[j].cards[i] = deck.deckOfCard[randomNumber];
 				while (deck.deckOfCard[randomNumber]
 						.equals("null")) {
 					randomNumber = (int) (Math.random()
 							* deck.deckOfCard.length);
-					shuffle[j][i] = deck.deckOfCard[randomNumber];
+					players[j].cards[i] = deck.deckOfCard[randomNumber];
 				}
 				deck.deckOfCard[randomNumber] = "null";
 			}
@@ -43,7 +49,7 @@ public class Cards {
 	}
 
 	public static void main(String[] args) {
-		Cards card = new Cards(6, 8);
+		Cards card = new Cards(4, 9);
 		card.shuffleCards();
 		card.printShuffledCard();
 	}
